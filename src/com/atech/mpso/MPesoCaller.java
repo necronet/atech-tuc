@@ -5,7 +5,6 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request.Method;
@@ -23,7 +22,7 @@ public class MPesoCaller extends ContextWrapper {
 
 	private String url = "http://190.124.38.36/datos/consulta.php";
 
-	public void consultarSaldo(final String tarjetaTUC, ResponseCallback callback) {
+	public void consultarSaldo(final String tarjetaTUC, final ResponseCallback callback) {
 
 		RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -32,13 +31,13 @@ public class MPesoCaller extends ContextWrapper {
 
 					@Override
 					public void onResponse(String response) {
-						Log.d("DEBUG", response);
+						callback.response(response);
 					}
 				}, new Response.ErrorListener() {
 
 					@Override
 					public void onErrorResponse(VolleyError error) {
-						Log.d("DEBUG", "Error " + error.getMessage());
+						callback.error(error.getMessage());
 					}
 				}) {
 
