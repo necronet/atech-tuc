@@ -6,5 +6,6 @@
     <string name="title">Consulta Saldo TUC</string>
     <string name="mpso_hint"># Tarjeta TUC</string>
     <string name="mpso_hint_texto"># Tarjeta TUC</string>
+    <string name="validation_error">Asegurese que su # de TUC sea correcto</string>
 
 </resources>
