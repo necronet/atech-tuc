@@ -49,7 +49,8 @@ public class MPsoActivity extends Activity implements ResponseCallback{
 		String tarjetaTUC = editText.getText().toString();
 		if (valid(tarjetaTUC))
 			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC, MPsoActivity.this);
-	
+		else
+			editText.setError(getString(R.string.validation_error));
 	}
 	
 	private boolean valid(String tarjetaTUC) {
