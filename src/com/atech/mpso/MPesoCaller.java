@@ -3,6 +3,9 @@ package com.atech.mpso;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.ContextWrapper;
 
@@ -31,7 +34,14 @@ public class MPesoCaller extends ContextWrapper {
 
 					@Override
 					public void onResponse(String response) {
-						callback.response(response);
+						JSONObject object;
+						try {
+							object = new JSONObject(response);
+							callback.response(object.getString("Mensaje"));
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+						
 					}
 				}, new Response.ErrorListener() {
 
