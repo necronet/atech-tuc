@@ -11,7 +11,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,23 +38,7 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 		setContentView(R.layout.activity_mpso);
 
 		ListView list = (ListView)findViewById(R.id.list);
-		adapter = new SimpleCursorAdapter(this, R.layout.tarjeta_item, null,
-				new String[] {Tarjeta.Columns.ALIAS, Tarjeta.Columns.ULTIMO_SALDO}, 
-				new int[] {R.id.textTarjetaAlias,R.id.textTarjetaSaldo}, 0);
-		
-		adapter.setViewBinder(new ViewBinder() {
-			
-			@Override
-			public boolean setViewValue(View v, Cursor c, int columnIndex) {
-				if (v.getId() == R.id.textTarjetaSaldo) {
-					String saldo = c.getString(c.getColumnIndex(Tarjeta.Columns.ULTIMO_SALDO));
-					saldo = String.format("C$ %s", saldo);
-					((TextView)v).setText(saldo);
-					return true;
-				}
-				return false;
-			}
-		});
+		adapter = new TarjetaAdapter(this, null);
 		
 		list.setAdapter(adapter);
 
