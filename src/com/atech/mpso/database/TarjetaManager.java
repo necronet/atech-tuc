@@ -3,11 +3,11 @@ package com.atech.mpso.database;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.atech.mpso.database.DatabaseContract.Tarjeta;
-
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+
+import com.atech.mpso.database.DatabaseContract.Historico;
+import com.atech.mpso.database.DatabaseContract.Tarjeta;
 
 
 /**
@@ -48,7 +48,6 @@ public class TarjetaManager {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
 		
-		
 		ContentValues values = new ContentValues();
 		values.put(Tarjeta.Columns.NUMERO, tarjeta);
 		values.put(Tarjeta.Columns.ALIAS, tarjeta);//por defecto el alias es el # de la tarjeta
@@ -57,6 +56,11 @@ public class TarjetaManager {
 		
 		context.getContentResolver().insert(Tarjeta.CONTENT_URI, values);
 		
+		values = new ContentValues();
+		values.put(Historico.Columns.NUMERO, tarjeta);
+		values.put(Historico.Columns.REVISION, format.format(calendar.getTime()));
+		values.put(Historico.Columns.SALDO, saldo);
+		context.getContentResolver().insert(Historico.CONTENT_URI, values);
 		
 		return this;
 	}

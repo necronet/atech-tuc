@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,6 +41,24 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 		setContentView(R.layout.activity_mpso);
 
 		ListView list = (ListView)findViewById(R.id.list);
+		
+		list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View v, int position,
+					long id) {
+				Intent intent = new Intent(MPsoActivity.this, HistoricoActivity.class);
+				
+				Cursor c = adapter.getCursor();
+				c.moveToPosition(position);
+				String tarjetaTUC = c.getString(c.getColumnIndex(Tarjeta.Columns.NUMERO));
+				String tarjetaSaldo = c.getString(c.getColumnIndex(Tarjeta.Columns.ULTIMO_SALDO));
+				
+				intent.putExtra("tarjetaTUC", tarjetaTUC);
+				intent.putExtra("tarjetaSaldo", tarjetaSaldo);
+				startActivity(intent);
+			}
+		});
 		adapter = new TarjetaAdapter(this, null);
 		
 		list.setAdapter(adapter);

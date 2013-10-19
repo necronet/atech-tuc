@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
         
+        <activity
+            android:name="com.atech.mpso.HistoricoActivity"
+             />
          <provider
             android:name="com.atech.mpso.database.MPesoContentProvider"
             android:authorities="com.atech.mpeso"
