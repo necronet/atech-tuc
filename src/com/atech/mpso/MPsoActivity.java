@@ -3,30 +3,45 @@ package com.atech.mpso;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.atech.mpso.database.TarjetaManager;
-
-import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MPsoActivity extends Activity implements ResponseCallback {
+import com.atech.mpso.database.DatabaseContract.Tarjeta;
+import com.atech.mpso.database.TarjetaManager;
+
+public class MPsoActivity extends FragmentActivity implements ResponseCallback,
+		LoaderCallbacks<Cursor> {
 
 	private EditText editText;
 	private String tarjetaTUC;
+	private SimpleCursorAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.title);
 		setContentView(R.layout.activity_mpso);
+
+		ListView list = (ListView)findViewById(R.id.list);
+		adapter = new SimpleCursorAdapter(this, R.layout.tarjeta_item, null,
+				new String[] {Tarjeta.Columns.ALIAS, Tarjeta.Columns.ULTIMO_SALDO}, 
+				new int[] {R.id.textTarjetaAlias,R.id.textTarjetaSaldo}, 0);
+		list.setAdapter(adapter);
 
 		editText = (EditText) findViewById(R.id.editTUC);
 
@@ -54,14 +69,22 @@ public class MPsoActivity extends Activity implements ResponseCallback {
 
 		if (BuildConfig.DEBUG)
 			editText.setText("00442039");
+		
+		
+	}
+	
+	public void onResume() {
+		super.onResume();
+		getSupportLoaderManager().restartLoader(0, null, this);
 	}
 
 	private void search() {
 		tarjetaTUC = editText.getText().toString();
-		if (valid(tarjetaTUC))
+		if (valid(tarjetaTUC)) {
 			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC,
 					MPsoActivity.this);
-		else
+			editText.setText("");
+		}else
 			editText.setError(getString(R.string.validation_error));
 	}
 
@@ -78,17 +101,35 @@ public class MPsoActivity extends Activity implements ResponseCallback {
 
 	@Override
 	public void response(String saldo) {
-		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)").matcher(saldo);
-		
-		if(matcher.find()) {
-			TarjetaManager.instance(getBaseContext()).save(tarjetaTUC, Double.parseDouble(matcher.group(1)));
-			
+		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)")
+				.matcher(saldo);
+
+		if (matcher.find()) {
+			TarjetaManager.instance(getBaseContext()).save(tarjetaTUC,
+					Double.parseDouble(matcher.group(1)));
+
 		}
 	}
 
 	@Override
 	public void error(String message) {
 		Toast.makeText(this, "saldo es " + message, Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle extras) {
+		return new CursorLoader(this, Tarjeta.CONTENT_URI, null, null, null,
+				null);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		adapter.swapCursor(cursor);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> cursor) {
+		adapter.swapCursor(null);
 	}
 
 }

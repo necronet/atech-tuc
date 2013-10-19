@@ -3,6 +3,8 @@ package com.atech.mpso.database;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.atech.mpso.database.DatabaseContract.Tarjeta;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,8 +18,7 @@ public class TarjetaManager {
 	
 	private static TarjetaManager instance;
 	private Context context;
-	private DatabaseHelper helper;
-
+	
 	private TarjetaManager() {
 		
 	}
@@ -39,7 +40,6 @@ public class TarjetaManager {
 	
 	public TarjetaManager setContext(Context context) {
 		this.context = context;
-		helper = new DatabaseHelper(context);
 		return this;
 	}
 
@@ -48,15 +48,15 @@ public class TarjetaManager {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
 		
-		SQLiteDatabase db = helper.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
-		values.put(TarjetaColumns.NUMERO, tarjeta);
-		values.put(TarjetaColumns.ALIAS, tarjeta);//por defecto el alias es el # de la tarjeta
-		values.put(TarjetaColumns.ULTIMA_REVISION, format.format(calendar.getTime()));
-		values.put(TarjetaColumns.ULTIMO_SALDO, saldo);
+		values.put(Tarjeta.Columns.NUMERO, tarjeta);
+		values.put(Tarjeta.Columns.ALIAS, tarjeta);//por defecto el alias es el # de la tarjeta
+		values.put(Tarjeta.Columns.ULTIMA_REVISION, format.format(calendar.getTime()));
+		values.put(Tarjeta.Columns.ULTIMO_SALDO, saldo);
 		
-		db.insert(Table.TARJETA, null, values);
+		context.getContentResolver().insert(Tarjeta.CONTENT_URI, values);
+		
 		
 		return this;
 	}

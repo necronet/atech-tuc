@@ -40,7 +40,6 @@ public class MPesoContentProvider extends ContentProvider {
 		selection = selection + BaseColumns._ID + " = "
 				+ uri.getLastPathSegment();
 
-		ContentValues values = new ContentValues();
 		rows = database.delete(table, selection, selectionArgs);
 		getContext().getContentResolver().notifyChange(uri, null);
 		
