@@ -24,6 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+         <provider
+            android:name="com.possol.kitch.provider.KitchProvider"
+            android:authorities="com.atech.mpeso"
+            android:exported="false"
+            android:readPermission="com.atech.mpeso.READ_DATA"
+            android:writePermission="com.atech.mpeso.WRITE_DATA" >
+        </provider>
     </application>
 
 </manifest>

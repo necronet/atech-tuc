@@ -3,6 +3,8 @@ package com.atech.mpso;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.atech.mpso.database.TarjetaManager;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;

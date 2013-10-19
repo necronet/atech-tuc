@@ -1,10 +1,7 @@
-package com.atech.mpso;
+package com.atech.mpso.database;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import com.atech.mpso.DatabaseHelper.Table;
-import com.atech.mpso.DatabaseHelper.TarjetaColumns;
 
 import android.content.ContentValues;
 import android.content.Context;
