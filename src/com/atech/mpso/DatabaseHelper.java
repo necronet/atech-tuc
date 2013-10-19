@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	public static final String CREATE_TARJETA_TABLE = 
 			String.format ("create table %s (%s int auto_increment primary key, "
 			+ "%s text not null, %s text not null, %s text not null, "
-			+ "%s text not null, unique(%s) )",
+			+ "%s text not null, unique(%s) ON CONFLICT REPLACE )",
 			Table.TARJETA, TarjetaColumns._ID,
 			TarjetaColumns.NUMERO,
 			TarjetaColumns.ALIAS,
