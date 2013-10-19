@@ -1,5 +1,8 @@
 package com.atech.mpso;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 public class MPsoActivity extends Activity implements ResponseCallback {
 
 	private EditText editText;
+	private String tarjetaTUC;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,7 @@ public class MPsoActivity extends Activity implements ResponseCallback {
 	}
 
 	private void search() {
-		String tarjetaTUC = editText.getText().toString();
+		tarjetaTUC = editText.getText().toString();
 		if (valid(tarjetaTUC))
 			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC,
 					MPsoActivity.this);
@@ -72,13 +76,17 @@ public class MPsoActivity extends Activity implements ResponseCallback {
 
 	@Override
 	public void response(String saldo) {
-		Toast.makeText(this, "saldo is " + saldo, Toast.LENGTH_LONG).show();
-		;
+		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)").matcher(saldo);
+		
+		if(matcher.find()) {
+			TarjetaManager.instance(getBaseContext()).save(tarjetaTUC, Double.parseDouble(matcher.group(1)));
+			
+		}
 	}
 
 	@Override
 	public void error(String message) {
-		Toast.makeText(this, "saldo is " + message, Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "saldo es " + message, Toast.LENGTH_LONG).show();
 	}
 
 }
