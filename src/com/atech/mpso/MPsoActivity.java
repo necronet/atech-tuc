@@ -120,8 +120,7 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 	private void search() {
 		tarjetaTUC = editText.getText().toString();
 		if (valid(tarjetaTUC)) {
-			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC,
-					MPsoActivity.this);
+			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC,this);
 			editText.setText("");
 		} else
 			editText.setError(getString(R.string.validation_error));
@@ -138,7 +137,7 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 	}
 
 	@Override
-	public void response(String saldo) {
+	public void response(String tarjetaTUC, String saldo) {
 		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)")
 				.matcher(saldo);
 
