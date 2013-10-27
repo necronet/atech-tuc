@@ -137,17 +137,14 @@ public class MPesoContentProvider extends ContentProvider {
 		String table = tableMap.get(match);
 
 		int rows = 0;
-
-		if (table == null)
-			throw new UnsupportedOperationException(String.format(
-					"Uri: %s is not supported", uri));
-
 		
+		if (table == null)
+			throw new UnsupportedOperationException(String.format("Uri: %s is not supported", uri));
+				
 		if (TextUtils.isEmpty(selection))
 			selection = "";
 
-		selection = selection + BaseColumns._ID + " = "
-				+ uri.getLastPathSegment();
+		selection = selection + BaseColumns._ID + " = " + uri.getLastPathSegment();
 
 		rows = database.update(table, values, selection, selectionArgs);
 		getContext().getContentResolver().notifyChange(uri, null);

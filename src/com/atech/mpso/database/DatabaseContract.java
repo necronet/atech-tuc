@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class DatabaseContract {
-
+	
 	public static final String AUTHORITY = "com.atech.mpeso";
 	private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
 	public static final UriMatcher URI_MATCHER = buildUriMatcher();
@@ -14,7 +14,7 @@ public class DatabaseContract {
 	private static UriMatcher buildUriMatcher() {
 		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		final String authority = AUTHORITY;
-
+		
 		matcher.addURI(authority, Tarjeta.PATH, Tarjeta.PATH_TOKEN);
 		matcher.addURI(authority, Tarjeta.PATH_FOR_ID,
 				Tarjeta.PATH_FOR_ID_TOKEN);
@@ -33,9 +33,8 @@ public class DatabaseContract {
 		public static final String PATH = "tarjetas";
 
 		public static final String PATH_FOR_ID = "tarjetas/*";
-
-		public static final Uri CONTENT_URI = BASE_URI.buildUpon()
-				.appendPath(PATH).build();
+		
+		public static final Uri CONTENT_URI = BASE_URI.buildUpon().appendPath(PATH).build();
 
 		public static final String CONTENT_TYPE_DIR = ContentResolver.CURSOR_DIR_BASE_TYPE
 				+ "/vnd.tarjetas.mpso";

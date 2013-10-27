@@ -80,7 +80,6 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 		});
 
 		findViewById(R.id.search).setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				search();
@@ -101,15 +100,13 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 	private void search() {
 		tarjetaTUC = editText.getText().toString();
 		if (valid(tarjetaTUC)) {
-			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC,
-					MPsoActivity.this);
+			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC, MPsoActivity.this);
 			editText.setText("");
 		}else
 			editText.setError(getString(R.string.validation_error));
 	}
 
 	private boolean valid(String tarjetaTUC) {
-
 		try {
 			Integer.parseInt(tarjetaTUC);
 		} catch (NumberFormatException ex) {
@@ -121,12 +118,10 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 
 	@Override
 	public void response(String saldo) {
-		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)")
-				.matcher(saldo);
+		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)").matcher(saldo);
 
 		if (matcher.find()) {
-			TarjetaManager.instance(getBaseContext()).save(tarjetaTUC,
-					Double.parseDouble(matcher.group(1)));
+			TarjetaManager.instance(getBaseContext()).save(tarjetaTUC,Double.parseDouble(matcher.group(1)));
 
 		}
 	}
@@ -138,10 +133,9 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle extras) {
-		return new CursorLoader(this, Tarjeta.CONTENT_URI, null, null, null,
-				null);
+		return new CursorLoader(this, Tarjeta.CONTENT_URI, null, null, null, Tarjeta.Columns._ID + " DESC");
 	}
-
+	
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 		adapter.swapCursor(cursor);

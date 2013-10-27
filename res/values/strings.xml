@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">uTUC</string>
-    <string name="action_settings">Settings</string>
+    <string name="historico_title">Historico %1$s</string>
+    <string name="action_settings">Configuraciones</string>
     <string name="title">Consulta Saldo TUC</string>
     <string name="mpso_hint"># Tarjeta TUC</string>
     <string name="mpso_hint_texto"># Tarjeta TUC</string>
