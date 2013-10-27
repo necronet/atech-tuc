@@ -1,17 +1,24 @@
 package com.atech.mpso;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +40,8 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 	private EditText editText;
 	private String tarjetaTUC;
 	private SimpleCursorAdapter adapter;
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,27 +49,30 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 		setTitle(R.string.title);
 		setContentView(R.layout.activity_mpso);
 
-		ListView list = (ListView)findViewById(R.id.list);
-		
+		ListView list = (ListView) findViewById(R.id.list);
+
 		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> adapterView, View v, int position,
-					long id) {
-				Intent intent = new Intent(MPsoActivity.this, HistoricoActivity.class);
-				
+			public void onItemClick(AdapterView<?> adapterView, View v,
+					int position, long id) {
+				Intent intent = new Intent(MPsoActivity.this,
+						HistoricoActivity.class);
+
 				Cursor c = adapter.getCursor();
 				c.moveToPosition(position);
-				String tarjetaTUC = c.getString(c.getColumnIndex(Tarjeta.Columns.NUMERO));
-				String tarjetaSaldo = c.getString(c.getColumnIndex(Tarjeta.Columns.ULTIMO_SALDO));
-				
+				String tarjetaTUC = c.getString(c
+						.getColumnIndex(Tarjeta.Columns.NUMERO));
+				String tarjetaSaldo = c.getString(c
+						.getColumnIndex(Tarjeta.Columns.ULTIMO_SALDO));
+
 				intent.putExtra("tarjetaTUC", tarjetaTUC);
 				intent.putExtra("tarjetaSaldo", tarjetaSaldo);
 				startActivity(intent);
 			}
 		});
 		adapter = new TarjetaAdapter(this, null);
-		
+
 		list.setAdapter(adapter);
 
 		editText = (EditText) findViewById(R.id.editTUC);
@@ -85,13 +97,21 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 				search();
 			}
 		});
-
+		
 		if (BuildConfig.DEBUG)
 			editText.setText("00442039");
+
+		Intent intent = new Intent(this, AlarmReceiver.class);
+		PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 		
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		// Hopefully your alarm will have a lower frequency than this!
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+				Calendar.getInstance().getTimeInMillis(),
+				30 * 1000, alarmIntent);
 		
 	}
-	
+
 	public void onResume() {
 		super.onResume();
 		getSupportLoaderManager().restartLoader(0, null, this);
@@ -100,9 +120,10 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 	private void search() {
 		tarjetaTUC = editText.getText().toString();
 		if (valid(tarjetaTUC)) {
-			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC, MPsoActivity.this);
+			new MPesoCaller(getBaseContext()).consultarSaldo(tarjetaTUC,
+					MPsoActivity.this);
 			editText.setText("");
-		}else
+		} else
 			editText.setError(getString(R.string.validation_error));
 	}
 
@@ -118,10 +139,12 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 
 	@Override
 	public void response(String saldo) {
-		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)").matcher(saldo);
+		Matcher matcher = Pattern.compile("C\\$\\s(\\d*\\.\\d*)")
+				.matcher(saldo);
 
 		if (matcher.find()) {
-			TarjetaManager.instance(getBaseContext()).save(tarjetaTUC,Double.parseDouble(matcher.group(1)));
+			TarjetaManager.instance(getBaseContext()).save(tarjetaTUC,
+					Double.parseDouble(matcher.group(1)));
 
 		}
 	}
@@ -133,9 +156,10 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback,
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle extras) {
-		return new CursorLoader(this, Tarjeta.CONTENT_URI, null, null, null, Tarjeta.Columns._ID + " DESC");
+		return new CursorLoader(this, Tarjeta.CONTENT_URI, null, null, null,
+				Tarjeta.Columns._ID + " DESC");
 	}
-	
+
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 		adapter.swapCursor(cursor);

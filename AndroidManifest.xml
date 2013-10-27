@@ -4,8 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     
+    
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
@@ -24,17 +27,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity
-            android:name="com.atech.mpso.HistoricoActivity"
-             />
-         <provider
+        <activity android:name="com.atech.mpso.HistoricoActivity" />
+
+        <provider
             android:name="com.atech.mpso.database.MPesoContentProvider"
             android:authorities="com.atech.mpeso"
             android:exported="false"
             android:readPermission="com.atech.mpeso.READ_DATA"
             android:writePermission="com.atech.mpeso.WRITE_DATA" >
         </provider>
+        
+        <receiver android:name="com.atech.mpso.AlarmReceiver" />
     </application>
 
 </manifest>
