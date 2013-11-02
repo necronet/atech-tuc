@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:key="refresh_rate"
+        android:title="@string/refresh_rate"
+        android:dialogTitle="@string/refresh_rate"
+        android:entries="@array/refresh_rate_entries"
+        android:entryValues="@array/refresh_rate_values">
+    </ListPreference>
+
+</PreferenceScreen>

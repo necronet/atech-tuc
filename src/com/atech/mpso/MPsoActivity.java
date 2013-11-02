@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -121,9 +122,9 @@ public class MPsoActivity extends FragmentActivity implements ResponseCallback, 
 
 	private void createAlarmReceiver() {
 
-		SharedPreferences preferences = getSharedPreferences("utuc", MODE_PRIVATE);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		int refreshRate = preferences.getInt("refresh_rate", BuildConfig.DEBUG ? DEVEL : HOURLY);
+		int refreshRate = Integer.parseInt(preferences.getString("refresh_rate", BuildConfig.DEBUG ? "5" : "0"));
 
 		long refreshTime = -1;
 		

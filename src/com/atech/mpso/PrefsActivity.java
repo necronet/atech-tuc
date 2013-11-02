@@ -1,14 +1,12 @@
 package com.atech.mpso;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
 import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 
-public class PrefsActivity extends Activity {
+public class PrefsActivity extends PreferenceActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +14,8 @@ public class PrefsActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
+		
+		addPreferencesFromResource(R.xml.my_preference);
 	}
 
 	@Override

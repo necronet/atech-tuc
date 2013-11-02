@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">uTUC</string>
+    <string name="refresh_rate">Tasa refrescamiento</string>
     <string name="historico_title">Historico %1$s</string>
     <string name="action_settings">Configuraciones</string>
     <string name="title">Consulta Saldo TUC</string>
@@ -9,5 +10,21 @@
     <string name="mpso_hint_texto"># Tarjeta TUC</string>
     <string name="validation_error">Asegurese que su # de TUC sea correcto</string>
     
-
+	<string-array name="refresh_rate_entries">
+	    <item name="0">1 Hora</item>
+	    <item name="1">2 Hora</item>
+	    <item name="2">4 Hora</item>
+	    <item name="3">6 Hora</item>
+	    <item name="4">Diario</item>
+	</string-array>
+	
+	<string-array name="refresh_rate_values">
+	    <item name="0">0</item>
+	    <item name="1">1</item>
+	    <item name="2">2</item>
+	    <item name="3">3</item>
+	    <item name="4">4</item>
+	</string-array>
+	
+    
 </resources>
