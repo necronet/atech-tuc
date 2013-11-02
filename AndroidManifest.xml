@@ -6,9 +6,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    
-    
-
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
@@ -36,8 +33,16 @@
             android:readPermission="com.atech.mpeso.READ_DATA"
             android:writePermission="com.atech.mpeso.WRITE_DATA" >
         </provider>
-        
+
         <receiver android:name="com.atech.mpso.AlarmReceiver" />
+
+        <activity
+            android:name="com.atech.mpso.PrefsActivity"
+            android:parentActivityName="com.atech.mpso.MPsoActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.atech.mpso.MPsoActivity" />
+        </activity>
     </application>
 
 </manifest>
